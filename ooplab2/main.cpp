@@ -10,7 +10,7 @@
 #include "incapsulation.hpp"
 
 
-#define INV_SIZE 400
+#define INV_SIZE 100
 
 void filterByTypeAndPrint(std::vector <Inventory *>& invs, std::string type) {
 	std::cout << "Позиции с типом '" << type << "': " << std::endl;
