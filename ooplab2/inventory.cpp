@@ -1,6 +1,7 @@
 
 #include "inventory.hpp"
 
+
 Inventory::Inventory (int number, std::string type, std::string factory):
 number (number), type (type), factory (factory) {
 
@@ -16,6 +17,12 @@ Inventory::Inventory (Inventory&& rvalue) {
 	rvalue.number = 0;
 	type = std::move (rvalue.type);
 	factory = std::move (rvalue.factory);
+}
+
+Inventory *Inventory::random(int number) {
+	const std::vector <std::string> types = { "Табурет", "Шкаф" };
+	const std::vector <std::string> factories = { "ООО \"Мебель\"", "ООО \"Фабрика\"", "ЗАО \"Завод\"", "ОАО \"Медведь\"" };
+	return new Inventory(number, selectRandom(types), selectRandom(factories));
 }
 
 Inventory::~Inventory () {

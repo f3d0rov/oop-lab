@@ -6,15 +6,27 @@ Inventory (number, "Стол", factory), material (material) {
 
 }
 
+Table* Table::random(int number) {
+	const std::vector <std::string> tableFactories = { "IKEA", "Table Factory(c)", "ООО Деревообработка" };
+	const std::vector <std::string> tableMaterials = { "Дерево", "Стекло", "Камень" };
+
+	return new Table(number, selectRandom(tableFactories), selectRandom(tableMaterials));
+}
+
 std::string Table::str() const {
 	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory + "', материал: " + this->material;
 }
 
 
 
-Chair::Chair(int number, std::string factory, bool soft, bool adjustable):
+Chair::Chair (int number, std::string factory, bool soft, bool adjustable):
 Inventory (number, "Стул", factory), soft (soft), adjustable (adjustable) {
 
+}
+
+Chair *Chair::random (int number) {
+	const std::vector <std::string> chairFactories = { "IKEA", "Chair Factory(c)", "ООО Деревообработка" };
+	return new Chair(number, selectRandom(chairFactories), std::rand() % 2, std::rand() % 2);
 }
 
 std::string Chair::str() const {
@@ -28,6 +40,11 @@ Inventory (number, "Монитор", factory), resolutionHeight (resHeight), resolution
 
 }
 
+Monitor* Monitor::random (int number) {
+	const std::vector <std::string> monitorFactories = { "DELL", "Asus", "LG" };
+	return new Monitor(number, selectRandom(monitorFactories), std::rand() % 4096, std::rand() % 4096);
+}
+
 std::string Monitor::str() const {
 	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory + "', "
 		+ std::to_string(this->resolutionWidth) + "x" + std::to_string(this->resolutionHeight);
@@ -38,6 +55,12 @@ Inventory (number, "Компьютер", factory), processor (processor), integratedGPU (
 
 }
 
+Computer* Computer::random (int number) {
+	const std::vector <std::string> computerFactories = { "DELL", "Asus", "Acer" };
+	const std::vector <std::string> processors = { "AMD", "Intel", "Эльбрус" };
+	return new Computer(number, selectRandom(computerFactories), selectRandom(processors), std::rand() % 2);
+}
+
 std::string Computer::str() const {
 	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory 
 		+ "', процессор: " + this->processor + ", " + (this->integratedGPU ? "встроенная видеокарта" : "дискретная видеокарта");
@@ -46,6 +69,12 @@ std::string Computer::str() const {
 Mouse::Mouse(int number, std::string factory, int dpiMin, int dpiMax):
 Inventory(number, "Компьютерная мышь", factory), dpiMin (dpiMin), dpiMax (dpiMax) {
 
+}
+
+Mouse *Mouse::random(int number) {
+	const std::vector <std::string> mouseFactories = { "Microsoft", "Apple", "Dell", "Digma" };
+	int minDpi = 400 + std::rand() % 3200;
+	return new Mouse(number, selectRandom(mouseFactories), minDpi, minDpi + std::rand() % 3200);
 }
 
 std::string Mouse::str() const {
