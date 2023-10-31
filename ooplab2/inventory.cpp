@@ -29,6 +29,18 @@ Inventory::~Inventory () {
 	// ???
 }
 
+int Inventory::getNumber() const {
+	return this->number;
+}
+
+std::string Inventory::getType() const {
+	return this->type;
+}
+
+std::string Inventory::getFactory() const {
+	return this->factory;
+}
+
 std::string Inventory::str () const {
 	return std::string("[") + std::to_string(this->number) + "] " + this->type + ", произведен '" + this->factory + "'";
 }

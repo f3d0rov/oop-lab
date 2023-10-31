@@ -8,6 +8,7 @@ class Table : public Inventory {
 		std::string material = "";
 		Table (int number, std::string factory, std::string material);
 		static Table *random (int number);
+		~Table();
 
 		std::string str () const override;
 };
@@ -18,6 +19,7 @@ class Chair : public Inventory {
 		bool adjustable = false;
 		Chair(int number, std::string factory, bool soft, bool adjustable);
 		static Chair* random (int number);
+		~Chair ();
 
 		std::string str () const override;
 };
@@ -29,6 +31,7 @@ class Monitor : public Inventory {
 		int resolutionHeight = 0;
 		Monitor (int number, std::string factory, int resWidth, int resHeight);
 		static Monitor *random (int number);
+		~Monitor ();
 
 		std::string str () const override;
 };
@@ -39,6 +42,7 @@ class Computer : public Inventory {
 		bool integratedGPU = true;
 		Computer (int number, std::string factory, std::string processor, bool integratedGPU);
 		static Computer *random (int number);
+		~Computer ();
 
 		std::string str() const override;
 };
@@ -49,6 +53,7 @@ class Mouse : public Inventory {
 
 		Mouse (int number, std::string factory, int dpiMin, int dpiMax);
 		static Mouse *random (int number);
+		~Mouse ();
 
 		std::string str() const override;
 };

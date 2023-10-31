@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "inventory.hpp"
+#include "inventory_manager.hpp"
 #include "specific_classes.hpp"
 
 #include "incapsulation.hpp"
@@ -12,35 +13,20 @@
 
 #define INV_SIZE 100
 
-void filterByTypeAndPrint(std::vector <Inventory *>& invs, std::string type) {
-	std::cout << "Позиции с типом '" << type << "': " << std::endl;
-	int count = 0;
-
-	for (auto& i : invs) {
-		if (i->type == type) {
-			std::cout << "    " << *i << std::endl;
-			count += 1;
-		}
-	}
-
-	std::cout << "Всего позиций: " << count << std::endl;
-}
-
-
-Inventory* generateRandomInventory() {
+void generateRandomInventoryForManager (InventoryManager &im) {
 	static int counter = 200001;
 
-	std::vector <std::function <Inventory * (int)> > funcs = {
-		generateRandom<Table>,
-		generateRandom<Chair>,
-		generateRandom<Monitor>,
-		generateRandom<Computer>,
-		generateRandom<Mouse>,
-		generateRandom<Inventory>
+	std::vector <std::function <void()>> funcs = {
+		std::bind(&InventoryManager::pushRandom<Table>, &im),
+		std::bind(&InventoryManager::pushRandom<Chair>, &im),
+		std::bind(&InventoryManager::pushRandom<Monitor>, &im),
+		std::bind(&InventoryManager::pushRandom<Computer>, &im),
+		std::bind(&InventoryManager::pushRandom<Mouse>, &im),
+		std::bind(&InventoryManager::pushRandom<Inventory>, &im)
 	};
 
 	int type = counter /*std::rand()*/ % (funcs.size());
-	return funcs[type](++counter);
+	funcs[type]();
 }
 
 void testIncapsulation() {
@@ -53,16 +39,14 @@ void testIncapsulation() {
 int main () {
 	setlocale (LC_ALL, "Russian");
 
-	std::vector <Inventory *> invs;
-	for (int i = 0; i < INV_SIZE; i++) invs.push_back(generateRandomInventory());
-	for (int i = 0; i < (20 > INV_SIZE ? INV_SIZE : 20); i++) {
-		std::cout << "[" << (i+1) << "] " << *invs[i] << std::endl;
-	}
-	std::cout << "Всего позиций: " << INV_SIZE << std::endl << std::endl;
+	InventoryManager manager;
+	manager.emplace <Chair> ("", true, true);
 
-	filterByTypeAndPrint (invs, "Монитор");
-	for (auto& i : invs) {
-		delete i;
-	}
+	for (int i = 0; i < INV_SIZE; i++) generateRandomInventoryForManager (manager);
+	manager.log (10);
+	manager.logFilterByType("Монитор");
+	manager.fixMissingFactoriesAndTypes();
+	manager.log (10);
+
 	return 0;
 }

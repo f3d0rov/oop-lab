@@ -13,8 +13,12 @@ Table* Table::random(int number) {
 	return new Table(number, selectRandom(tableFactories), selectRandom(tableMaterials));
 }
 
+Table::~Table() {
+
+}
+
 std::string Table::str() const {
-	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory + "', материал: " + this->material;
+	return std::string("[") + std::to_string(this->getNumber()) + "] " + this->getType() + " '" + this->getFactory() + "', материал: " + this->material;
 }
 
 
@@ -29,8 +33,12 @@ Chair *Chair::random (int number) {
 	return new Chair(number, selectRandom(chairFactories), std::rand() % 2, std::rand() % 2);
 }
 
+Chair::~Chair() {
+
+}
+
 std::string Chair::str() const {
-	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory + "', "
+	return std::string("[") + std::to_string(this->getNumber()) + "] " + this->getType() + " '" + this->getFactory() + "', "
 		+ (this->adjustable ? "регулируемый" : "не регулируемый") + ", " + (this->soft ? "с мягким покрытием" : "с твердым покрытием");
 }
 
@@ -45,8 +53,12 @@ Monitor* Monitor::random (int number) {
 	return new Monitor(number, selectRandom(monitorFactories), std::rand() % 4096, std::rand() % 4096);
 }
 
+Monitor::~Monitor() {
+
+}
+
 std::string Monitor::str() const {
-	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory + "', "
+	return std::string("[") + std::to_string(this->getNumber()) + "] " + this->getType() + " '" + this->getFactory() + "', "
 		+ std::to_string(this->resolutionWidth) + "x" + std::to_string(this->resolutionHeight);
 }
 
@@ -61,8 +73,12 @@ Computer* Computer::random (int number) {
 	return new Computer(number, selectRandom(computerFactories), selectRandom(processors), std::rand() % 2);
 }
 
+Computer::~Computer() {
+
+}
+
 std::string Computer::str() const {
-	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory 
+	return std::string("[") + std::to_string(this->getNumber()) + "] " + this->getType() + " '" + this->getFactory()
 		+ "', процессор: " + this->processor + ", " + (this->integratedGPU ? "встроенная видеокарта" : "дискретная видеокарта");
 }
 
@@ -77,7 +93,11 @@ Mouse *Mouse::random(int number) {
 	return new Mouse(number, selectRandom(mouseFactories), minDpi, minDpi + std::rand() % 3200);
 }
 
+Mouse::~Mouse() {
+
+}
+
 std::string Mouse::str() const {
-	return std::string("[") + std::to_string(this->number) + "] " + this->type + " '" + this->factory
+	return std::string("[") + std::to_string(this->getNumber()) + "] " + this->getType() + " '" + this->getFactory()
 		+ "', DPI от " + std::to_string (this->dpiMin) + " до " + std::to_string (this->dpiMax);
 }

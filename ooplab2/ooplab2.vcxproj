@@ -138,12 +138,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="inventory_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="inventory.cpp" />
     <ClCompile Include="specific_classes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="incapsulation.hpp" />
+    <ClInclude Include="inventory_manager.hpp" />
     <ClInclude Include="specific_classes.hpp" />
     <ClInclude Include="inventory.hpp" />
   </ItemGroup>

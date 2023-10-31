@@ -16,16 +16,23 @@ T *generateRandom (int num) {
 }
 
 class Inventory {
-	public:
+	private:
 		int number;
 		std::string type;
 		std::string factory;
+
+	public:
+		friend class InventoryManager;
 
 		Inventory (int number, std::string type, std::string factory);
 		Inventory (const Inventory& lvalue);
 		Inventory (Inventory&& rvalue);
 		static Inventory *random(int number);
-		~Inventory ();
+		virtual ~Inventory ();
+
+		int getNumber () const;
+		std::string getType () const;
+		std::string getFactory () const;
 
 		virtual std::string str() const;
 		friend std::ostream& operator<< (std::ostream& os, const Inventory& inv);
