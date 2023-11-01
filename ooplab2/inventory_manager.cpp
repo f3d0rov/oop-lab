@@ -33,7 +33,7 @@ void InventoryManager::logFilterByType(std::string type) {
 		}
 	}
 
-	std::cout << "Всего позиций: " << count << std::endl;
+	std::cout << "Всего позиций: " << count << std::endl << std::endl;
 }
 
 void InventoryManager::assertInventoryHasFactoriesAndTypes() {

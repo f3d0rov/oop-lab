@@ -37,3 +37,12 @@ public:
 		//std::cout << privateVal;
 	}
 };
+
+/*
+void testIncapsulation() {
+        PublicChild pubC;
+        ProtectedChild protC;
+        PrivateChild privC;
+        std::cout << std::endl;
+}
+*/
