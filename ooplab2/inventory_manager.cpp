@@ -1,55 +1,65 @@
 
 #include "inventory_manager.hpp"
 
-int InventoryManager::_counter = 200001;
 
-InventoryManager::~InventoryManager() {
+InventoryManagerInterface::~InventoryManagerInterface() {
+
+}
+
+std::vector <const InventoryIface *> InventoryManagerInterface::filterByType (std::string type) {
+	return this->filterBy([type](InventoryIface* i) -> bool { return i->getType() == type; });
+}
+
+
+
+
+int InventoryManagerImpl::_counter = 200001;
+
+
+InventoryManagerImpl::~InventoryManagerImpl() {
 	for (auto& i : this->_invs) {
 		delete i;
 	}
 }
 
-void InventoryManager::log (int count) {
-	if (count > this->_invs.size()) count = this->_invs.size();
-	for (int i = 0; i < count; i++) {
-		std::cout << "[" << (i + 1) << "] " << *(this->_invs[i]) << std::endl;
+int InventoryManagerImpl::takeNextCounter() {
+	return this->_counter++;
+}
+
+
+void InventoryManagerImpl::push (InventoryIface* inv) {
+	if (inv->getNumber() < 0) inv->setNumber (this->takeNextCounter());
+	this->_invs.push_back (inv);
+}
+
+std::vector <const InventoryIface *> InventoryManagerImpl::getAll () {
+	return std::vector <const InventoryIface*> (this->_invs.begin(), this->_invs.end());
+}
+
+std::vector <const InventoryIface *> InventoryManagerImpl::filterBy (std::function <bool(InventoryIface*)> filter) {
+	std::vector <const InventoryIface *> results{};
+	for (auto i: this->_invs) {
+		if (filter(i)) results.push_back (i);
 	}
-
-	std::cout << "Всего позиций: " << this->_invs.size() << std::endl << std::endl;
+	return results;
 }
 
-void InventoryManager::logAll() {
-	this->log (this->_invs.size());
-}
 
-void InventoryManager::logFilterByType(std::string type) {
-	std::cout << "Позиции с типом '" << type << "': " << std::endl;
-	int count = 0;
 
+void InventoryManagerImpl::assertInventoryHasFactoriesAndTypes() {
 	for (auto& i : this->_invs) {
-		if (i->getType() == type) {
-			std::cout << "    " << *i << std::endl;
-			count += 1;
-		}
-	}
-
-	std::cout << "Всего позиций: " << count << std::endl << std::endl;
-}
-
-void InventoryManager::assertInventoryHasFactoriesAndTypes() {
-	for (auto& i : this->_invs) {
-		if (i->factory == "") throw std::runtime_error ("Отсутствует поле `factory` у объекта Inventory");
-		if (i->type == "") throw std::runtime_error("Отсутствует поле `type` у объекта Inventory");
+		if (i->getFactory() == "") throw std::runtime_error ("Отсутствует поле `factory` у объекта Inventory");
+		if (i->getType() == "") throw std::runtime_error("Отсутствует поле `type` у объекта Inventory");
 	}
 }
 
-void InventoryManager::fixMissingFactoriesAndTypes () {
+void InventoryManagerImpl::fixMissingFactoriesAndTypes () {
 	try {
 		assertInventoryHasFactoriesAndTypes ();
 	} catch (std::exception &e) {
 		for (auto& i : this->_invs) {
-			if (i->factory == "") i->factory = "[На расследовании]";
-			if (i->type == "") i->type = "[На расследовании]";
+			if (i->getFactory() == "") i->setFactory ("[На расследовании]");
+			if (i->getType() == "") i->setType ("[На расследовании]");
 		}
 	}
 	try {
@@ -58,3 +68,4 @@ void InventoryManager::fixMissingFactoriesAndTypes () {
 		throw std::logic_error ("InventoryManager::fixMissingFactoriesAndTypes не смог исправить ошибки");
 	}
 }
+

@@ -1,8 +1,72 @@
 
 #include "specific_classes.hpp"
 
+
+
+BasicInventory::BasicInventory(int number, std::string type, std::string factory) :
+	number(number), type(type), factory(factory) {
+
+}
+
+BasicInventory::BasicInventory (const BasicInventory& lvalue) :
+	number(lvalue.number), type(lvalue.type), factory(lvalue.factory) {
+
+}
+
+BasicInventory::BasicInventory (BasicInventory&& rvalue) {
+	number = rvalue.number;
+	rvalue.number = 0;
+	type = std::move(rvalue.type);
+	factory = std::move(rvalue.factory);
+}
+
+BasicInventory* BasicInventory::random (int number) {
+	const std::vector <std::string> types = { "Табурет", "Шкаф" };
+	const std::vector <std::string> factories = { "ООО \"Мебель\"", "ООО \"Фабрика\"", "ЗАО \"Завод\"", "ОАО \"Медведь\"" };
+	return new BasicInventory (number, selectRandom(types), selectRandom(factories));
+}
+
+BasicInventory::~BasicInventory() {
+	// ???
+}
+
+int BasicInventory::getNumber() const {
+	return this->number;
+}
+
+std::string BasicInventory::getType() const {
+	return this->type;
+}
+
+std::string BasicInventory::getFactory() const {
+	return this->factory;
+}
+
+
+void BasicInventory::setNumber (int n) {
+	this->number = n;
+}
+
+void BasicInventory::setType (std::string type) {
+	this->type = type;
+}
+
+
+void BasicInventory::setFactory (std::string factory) {
+	this->factory = factory;
+}
+
+
+std::string BasicInventory::str() const {
+	return std::string("[") + std::to_string(this->number) + "] " + this->type + ", произведен '" + this->factory + "'";
+}
+
+
+
+
+
 Table::Table (int number, std::string factory, std::string material):
-Inventory (number, "Стол", factory), material (material) {
+	BasicInventory(number, "Стол", factory), material (material) {
 
 }
 
@@ -23,8 +87,10 @@ std::string Table::str() const {
 
 
 
+
+
 Chair::Chair (int number, std::string factory, bool soft, bool adjustable):
-Inventory (number, "Стул", factory), soft (soft), adjustable (adjustable) {
+BasicInventory (number, "Стул", factory), soft (soft), adjustable (adjustable) {
 
 }
 
@@ -43,8 +109,11 @@ std::string Chair::str() const {
 }
 
 
+
+
+
 Monitor::Monitor(int number, std::string factory, int resWidth, int resHeight):
-Inventory (number, "Монитор", factory), resolutionHeight (resHeight), resolutionWidth (resWidth) {
+BasicInventory (number, "Монитор", factory), resolutionHeight (resHeight), resolutionWidth (resWidth) {
 
 }
 
@@ -62,8 +131,11 @@ std::string Monitor::str() const {
 		+ std::to_string(this->resolutionWidth) + "x" + std::to_string(this->resolutionHeight);
 }
 
+
+
+
 Computer::Computer(int number, std::string factory, std::string processor, bool integratedGPU):
-Inventory (number, "Компьютер", factory), processor (processor), integratedGPU (integratedGPU) {
+BasicInventory (number, "Компьютер", factory), processor (processor), integratedGPU (integratedGPU) {
 
 }
 
@@ -82,8 +154,11 @@ std::string Computer::str() const {
 		+ "', процессор: " + this->processor + ", " + (this->integratedGPU ? "встроенная видеокарта" : "дискретная видеокарта");
 }
 
+
+
+
 Mouse::Mouse(int number, std::string factory, int dpiMin, int dpiMax):
-Inventory(number, "Компьютерная мышь", factory), dpiMin (dpiMin), dpiMax (dpiMax) {
+BasicInventory (number, "Компьютерная мышь", factory), dpiMin (dpiMin), dpiMax (dpiMax) {
 
 }
 

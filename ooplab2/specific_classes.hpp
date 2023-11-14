@@ -3,7 +3,71 @@
 #include "inventory.hpp"
 
 
-class Table : public Inventory {
+class BasicInventory : public InventoryIface {
+private:
+	int number;
+	std::string type;
+	std::string factory;
+
+public:
+
+	BasicInventory (int number, std::string type, std::string factory);
+	BasicInventory (const BasicInventory& lvalue);
+	BasicInventory (BasicInventory&& rvalue);
+
+	static BasicInventory* random(int number);
+	virtual ~BasicInventory();
+
+	int getNumber() const override;
+	std::string getType() const override;
+	std::string getFactory() const override;
+
+	void setNumber(int n) override;
+	void setType(std::string type) override;
+	void setFactory(std::string factory) override;
+
+	virtual std::string str() const override;
+};
+
+
+
+template <class T>
+T selectRandom(const std::vector<T>& vec) {
+	return vec[std::rand() % vec.size()];
+}
+
+template <class T>
+T* generateRandom(int num) {
+	return T::template random(num);
+}
+
+
+template <class T, class ...Args>
+class RandomInventoryGenerator {
+public:
+	static BasicInventory* generateRandom(int number, size_t c) {
+		if (c == 0) return T::template random(number);
+		return RandomInventoryGenerator<Args...>::generateRandom(number, c - 1);
+	}
+};
+
+template <class T>
+class RandomInventoryGenerator<T> {
+public:
+	static BasicInventory* generateRandom(int number, size_t c) {
+		if (c == 0) return T::template random(number);
+		throw std::logic_error("RandomInventoryGenerator::generateRandom достигнута при `c` != 1");
+	}
+};
+
+template <class ...Args>
+BasicInventory* generateRandomOf(int number = -1) {
+	return RandomInventoryGenerator<Args...>::generateRandom(number, std::rand() % sizeof...(Args));
+}
+
+
+
+class Table : public BasicInventory {
 	public:
 		std::string material = "";
 		Table (int number, std::string factory, std::string material);
@@ -13,7 +77,8 @@ class Table : public Inventory {
 		std::string str () const override;
 };
 
-class Chair : public Inventory {
+
+class Chair : public BasicInventory {
 	public:
 		bool soft = false;
 		bool adjustable = false;
@@ -24,7 +89,8 @@ class Chair : public Inventory {
 		std::string str () const override;
 };
 
-class Monitor : public Inventory {
+
+class Monitor : public BasicInventory {
 	public:
 		int colorDepth = 32;
 		int resolutionWidth = 0;
@@ -36,7 +102,8 @@ class Monitor : public Inventory {
 		std::string str () const override;
 };
 
-class Computer : public Inventory {
+
+class Computer : public BasicInventory {
 	public:
 		std::string processor = "";
 		bool integratedGPU = true;
@@ -47,7 +114,8 @@ class Computer : public Inventory {
 		std::string str() const override;
 };
 
-class Mouse : public Inventory {
+
+class Mouse : public BasicInventory {
 	public:
 		int dpiMin = 800, dpiMax = 3200;
 

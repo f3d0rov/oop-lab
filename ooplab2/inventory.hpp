@@ -5,37 +5,22 @@
 #include <vector>
 
 
-template <class T>
-T selectRandom(const std::vector<T>& vec) {
-	return vec[std::rand() % vec.size()];
-}
-
-template <class T>
-T *generateRandom (int num) {
-	return T::template random (num);
-}
-
-class Inventory {
-	private:
-		int number;
-		std::string type;
-		std::string factory;
-
+class InventoryIface {
 	public:
-		friend class InventoryManager;
+		virtual ~InventoryIface();
 
-		Inventory (int number, std::string type, std::string factory);
-		Inventory (const Inventory& lvalue);
-		Inventory (Inventory&& rvalue);
-		static Inventory *random(int number);
-		virtual ~Inventory ();
+		virtual int getNumber() const = 0;
+		virtual std::string getType() const = 0;
+		virtual std::string getFactory() const = 0;
 
-		int getNumber () const;
-		std::string getType () const;
-		std::string getFactory () const;
+		virtual void setNumber	(int n) = 0;
+		virtual void setType	(std::string type) = 0;
+		virtual void setFactory	(std::string factory) = 0;
 
-		virtual std::string str() const;
-		friend std::ostream& operator<< (std::ostream& os, const Inventory& inv);
+		// virtual bool requiresNumber ();
+
+		virtual std::string str() const = 0;
 };
 
-std::ostream &operator<< (std::ostream &os, const Inventory &inv);
+
+std::ostream& operator<< (std::ostream& os, const InventoryIface& inv);
